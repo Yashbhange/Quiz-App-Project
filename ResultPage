@@ -1,0 +1,23 @@
+import javax.swing.*;
+
+class ResultPage extends JFrame {
+
+    ResultPage(int score, int total) {
+        setTitle("Result");
+        setSize(400, 300);
+        setLayout(null);
+
+        int percentage = (score * 100) / total;
+
+        JLabel result = new JLabel("Score: " + score + "/" + total);
+        result.setBounds(120, 80, 200, 30);
+
+        JLabel percent = new JLabel("Percentage: " + percentage + "%");
+        percent.setBounds(120, 120, 200, 30);
+
+        add(result);
+        add(percent);
+
+        setVisible(true);
+    }
+}
