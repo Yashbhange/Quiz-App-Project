@@ -1,0 +1,117 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+
+class QuizPage extends JFrame implements ActionListener {
+
+    String questions[][] = {
+        {"Which language is used for Java?", "C", "Java", "Python", "HTML"},
+        {"Which is not OOP concept?", "Inheritance", "Encapsulation", "Polymorphism", "Compilation"},
+        {"Which company developed Java?", "Microsoft", "Apple", "Sun Microsystems", "Google"}
+    };
+
+    String answers[] = {"Java", "Compilation", "Sun Microsystems"};
+
+    int current = 0, score = 0, time = 15;
+
+    JLabel q, timerLabel;
+    JRadioButton opt1, opt2, opt3, opt4;
+    ButtonGroup options;
+    JButton next;
+
+    Timer timer;
+
+    QuizPage(String name) {
+        setTitle("Quiz App - " + name);
+        setSize(600, 400);
+        setLayout(null);
+        getContentPane().setBackground(Color.WHITE);
+
+        JLabel heading = new JLabel("Quiz Application");
+        heading.setBounds(200, 20, 300, 30);
+        heading.setFont(new Font("Arial", Font.BOLD, 22));
+        add(heading);
+
+        timerLabel = new JLabel("Time: 15");
+        timerLabel.setBounds(500, 20, 100, 30);
+        add(timerLabel);
+
+        q = new JLabel();
+        q.setBounds(50, 80, 500, 30);
+        add(q);
+
+        opt1 = new JRadioButton();
+        opt1.setBounds(50, 130, 200, 30);
+        opt2 = new JRadioButton();
+        opt2.setBounds(300, 130, 200, 30);
+        opt3 = new JRadioButton();
+        opt3.setBounds(50, 180, 200, 30);
+        opt4 = new JRadioButton();
+        opt4.setBounds(300, 180, 200, 30);
+
+        add(opt1); add(opt2); add(opt3); add(opt4);
+
+        options = new ButtonGroup();
+        options.add(opt1); options.add(opt2);
+        options.add(opt3); options.add(opt4);
+
+        next = new JButton("Next");
+        next.setBounds(250, 250, 100, 30);
+        next.addActionListener(this);
+        add(next);
+
+        loadQuestion();
+
+        timer = new Timer(1000, e -> {
+            time--;
+            timerLabel.setText("Time: " + time);
+
+            if (time == 0) {
+                checkAnswer();
+                nextQuestion();
+            }
+        });
+
+        timer.start();
+        setVisible(true);
+    }
+
+    void loadQuestion() {
+        time = 15;
+        q.setText(questions[current][0]);
+        opt1.setText(questions[current][1]);
+        opt2.setText(questions[current][2]);
+        opt3.setText(questions[current][3]);
+        opt4.setText(questions[current][4]);
+        options.clearSelection();
+    }
+
+    void checkAnswer() {
+        String selected = "";
+
+        if (opt1.isSelected()) selected = opt1.getText();
+        else if (opt2.isSelected()) selected = opt2.getText();
+        else if (opt3.isSelected()) selected = opt3.getText();
+        else if (opt4.isSelected()) selected = opt4.getText();
+
+        if (selected.equals(answers[current])) {
+            score++;
+        }
+    }
+
+    void nextQuestion() {
+        current++;
+        if (current < questions.length) {
+            loadQuestion();
+        } else {
+            timer.stop();
+            new ResultPage(score, questions.length);
+            setVisible(false);
+        }
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        checkAnswer();
+        nextQuestion();
+    }
+}
