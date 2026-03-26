@@ -1,0 +1,34 @@
+import javax.swing.*;
+import java.awt.event.*;
+
+class LoginPage extends JFrame implements ActionListener {
+    JTextField nameField;
+    JButton start;
+
+    LoginPage() {
+        setTitle("Quiz Login");
+        setSize(400, 200);
+        setLayout(null);
+
+        JLabel name = new JLabel("Enter Your Name:");
+        name.setBounds(50, 50, 150, 30);
+        add(name);
+
+        nameField = new JTextField();
+        nameField.setBounds(200, 50, 150, 30);
+        add(nameField);
+
+        start = new JButton("Start Quiz");
+        start.setBounds(120, 100, 150, 30);
+        start.addActionListener(this);
+        add(start);
+
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent e) {
+        String username = nameField.getText();
+        new QuizPage(username);
+        setVisible(false);
+    }
+}
